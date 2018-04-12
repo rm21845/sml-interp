@@ -7,7 +7,6 @@ let
     val keywords = ["push","pop",":false:",":true",":error:","add","sub","mul","div","rem",
 		   "neg","swap","quit"]
     val stack = []
-
     val pushVal = []
 
     (*Pop top of stack or return error if stack is empty *)
@@ -41,7 +40,6 @@ let
       then ""
       else Char.toString(hd c) ^ charToStr(tl c)
 
-
     (* Swaps top two elements in stack. Takes the first two elements in the stack, reverses their order, then concats the reverse with *)
     (* the stacked returned after dropping the first two elements(same as the ones first taken) from the list in the orginal stack *)
     fun swap(s : (int * string) list) =
@@ -50,7 +48,6 @@ let
       else if  #1 (hd s) = 19 orelse  #1  (hd (tl s)) = 19 orelse  #1 (hd s) = 20 orelse  #1  (hd (tl s)) = 20 
       then  (3, ":error:")::s
       else rev(List.take(s,2)) @ List.drop(s,2)
-
 
     fun fixUnit(a : char list, original : string,s : int ) = 
       if null a orelse null (tl a)
@@ -69,7 +66,6 @@ let
       then ":unit:"
       else original
     
-
     (*Why this language represents negative with a tilde is beyond me *)
      fun ripTilde(c : char list) =
       if null c
@@ -80,7 +76,6 @@ let
 
      fun tokenizeValue(toTokenize: string) =      
        String.tokens( fn x=> x = #",")toTokenize 
-
 
      (*This function is called on after we have discovered that a name has a *)
      fun getBindValue(value: (int* string), stack: (int * string) list) =
@@ -111,7 +106,6 @@ let
        then true
        else false
 
-
      (*binds a value to a name*)
      fun binding(stack: (int * string) list) =
        if null stack orelse null (tl stack)
@@ -123,8 +117,6 @@ let
 		      "," ^ #2 (getBindValue((hd (stack)), stack)))::(List.drop(stack,2))
 	   else (21, ":unit:" ^  "," ^  #2 (hd (tl stack)) ^  "," ^ Int.toString( #1 (hd (stack))) ^  "," ^  #2 (hd (stack)))::(List.drop(stack,2))
        else  (3, ":error:")::stack
-
-
 
     (*Returns true if an element is boolean type by seeing if it is of either type true or false*)
     (* This is a helper function for boolean operations *)
@@ -142,7 +134,6 @@ let
       then ":false:"
       else (#2 (getBindValue((#1(toBool),#2( toBool)), stack)))
       
-
      fun anding(opType : int, stack: (int * string) list) =
        if null stack orelse null (tl stack)
        then  (3, ":error:")::stack
@@ -160,7 +151,6 @@ let
        else if ( getBool((hd( stack)),stack) = ":true:") orelse( getBool((hd (tl stack)),(tl stack)) = ":true:")
        then (5, ":true:")::(tl (tl stack))
        else (4, ":false:")::(tl (tl stack))
-
 
      fun noting(opType : int, stack: (int * string) list) =
        if null stack
@@ -181,7 +171,6 @@ let
 	  else hd (tl s)::List.drop(s,3)
       else (3, ":error:")::s
 
-
     (* Used by arithmetic operation functions to determine if elements within a stack are integers *)
     (* by checking to see if its code type is that of a push value which implicitly indicates an integer type *)
     fun isElementDigit(stack: (int * string) list) =
@@ -196,7 +185,6 @@ let
       then (getOpt(Int.fromString(toInt), 0))
       else getOpt(Int.fromString(#2 (getBindValue((13, toInt), stack))), 0)
       
-
     (* I'm sure I will forget what that else condition is doing so it is *)
     (* Taking the two top two elements pushed to the stacks that are in string format *)
     (* Converting them both int option -> int, performing the given integer operation according to the code passed in, then converting the result back into a string *)
@@ -408,7 +396,6 @@ let
 			 then (23, "")                    (*23 is if*)                   
 			 else  (99,"") )
 
-
     (*pops and pushes things from the stack. May also perform small minor semantic operations*)
     fun operation(x: (int * string) list, y: (int * string) list) =(if null x
 								    then y
@@ -473,8 +460,3 @@ let
 in
 prtStack(operation(helper(line),stack))	
 end
-
-
-
-
-
